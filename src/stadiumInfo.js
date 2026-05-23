@@ -8,6 +8,7 @@ const STADIUMS = [
   {
     match: ['metlife', 'new york new jersey', 'east rutherford'],
     name: 'MetLife Stadium (New York New Jersey Stadium)',
+    wikipedia: 'MetLife_Stadium',
     capacity: '82,500',
     opened: '2010',
     history: 'Home of the NFL Giants and Jets. Hosted WrestleMania 29 and Copa America Centenario 2016 final. Selected for the 2026 World Cup Final on July 19, 2026.',
@@ -18,6 +19,7 @@ const STADIUMS = [
   {
     match: ['sofi', 'los angeles stadium', 'inglewood'],
     name: 'SoFi Stadium (Los Angeles Stadium)',
+    wikipedia: 'SoFi_Stadium',
     capacity: '70,000',
     opened: '2020',
     history: 'Home of the LA Rams and Chargers. Hosted Super Bowl LVI (2022), the College Football Playoff Championship, and the 2026 Olympics opening ceremony. Will host quarterfinal in 2026.',
@@ -28,6 +30,7 @@ const STADIUMS = [
   {
     match: ['at&t stadium', 'dallas stadium', 'arlington'],
     name: 'AT&T Stadium (Dallas Stadium)',
+    wikipedia: 'AT%26T_Stadium',
     capacity: '94,000',
     opened: '2009',
     history: 'Home of the Dallas Cowboys — "Jerry World." Largest venue at the 2026 tournament. Hosted Super Bowl XLV, multiple College Football Playoff games, and WrestleMania 32 (which set the venue\'s all-time attendance record at 101,763).',
@@ -38,6 +41,7 @@ const STADIUMS = [
   {
     match: ['mercedes-benz', 'mercedes benz', 'atlanta stadium'],
     name: 'Mercedes-Benz Stadium (Atlanta Stadium)',
+    wikipedia: 'Mercedes-Benz_Stadium',
     capacity: '75,000',
     opened: '2017',
     history: 'Home of Atlanta Falcons and Atlanta United FC. Hosted Super Bowl LIII (2019) and the 2018 & 2025 College Football Championships. Famous for its retractable "camera aperture" roof.',
@@ -48,6 +52,7 @@ const STADIUMS = [
   {
     match: ['hard rock', 'miami stadium', 'miami gardens'],
     name: 'Hard Rock Stadium (Miami Stadium)',
+    wikipedia: 'Hard_Rock_Stadium',
     capacity: '65,000',
     opened: '1987',
     history: 'Home of the Miami Dolphins and the Miami Open tennis tournament. Hosted six Super Bowls, the 2024 & 2026 Copa America Final, and the F1 Miami Grand Prix circuit wraps the venue.',
@@ -58,6 +63,7 @@ const STADIUMS = [
   {
     match: ['arrowhead', 'kansas city stadium'],
     name: 'Arrowhead Stadium (Kansas City Stadium)',
+    wikipedia: 'Arrowhead_Stadium',
     capacity: '76,000',
     opened: '1972',
     history: 'Home of the 3-time Super Bowl champion Kansas City Chiefs. Holds the Guinness World Record for loudest outdoor stadium (142.2 dB, 2014). Hosted the 1976 MLB All-Star Game and AFC Championship games.',
@@ -68,6 +74,7 @@ const STADIUMS = [
   {
     match: ["levi's", 'san francisco bay area', 'santa clara'],
     name: "Levi's Stadium (San Francisco Bay Area Stadium)",
+    wikipedia: "Levi%27s_Stadium",
     capacity: '68,500',
     opened: '2014',
     history: 'Home of the San Francisco 49ers. Hosted Super Bowl 50 (2016), the College Football National Championship, and the 2026 Copa America. First major American sports venue to achieve LEED Gold certification.',
@@ -78,6 +85,7 @@ const STADIUMS = [
   {
     match: ['lincoln financial', 'philadelphia stadium'],
     name: 'Lincoln Financial Field (Philadelphia Stadium)',
+    wikipedia: 'Lincoln_Financial_Field',
     capacity: '69,000',
     opened: '2003',
     history: 'Home of the Philadelphia Eagles. Hosted the 2003 MLS Cup, multiple Army-Navy games, and the famous 2017 NFC Championship snow game. Will host group stage and Round of 16 in 2026.',
@@ -88,6 +96,7 @@ const STADIUMS = [
   {
     match: ['nrg stadium', 'houston stadium'],
     name: 'NRG Stadium (Houston Stadium)',
+    wikipedia: 'NRG_Stadium',
     capacity: '72,000',
     opened: '2002',
     history: 'Home of the Houston Texans and the Houston Livestock Show and Rodeo (world\'s largest). First NFL stadium with a retractable roof. Hosted Super Bowls XXXVIII and LI (the Patriots\' 28-3 comeback).',
@@ -98,6 +107,7 @@ const STADIUMS = [
   {
     match: ['gillette', 'boston stadium', 'foxborough'],
     name: 'Gillette Stadium (Boston Stadium)',
+    wikipedia: 'Gillette_Stadium',
     capacity: '65,000',
     opened: '2002',
     history: 'Home of the 6-time Super Bowl champion New England Patriots and the New England Revolution (MLS). Hosted the 2026 Copa America Final. The "Lighthouse" tower at the north end is the stadium\'s signature feature.',
@@ -108,6 +118,7 @@ const STADIUMS = [
   {
     match: ['lumen field', 'seattle stadium'],
     name: 'Lumen Field (Seattle Stadium)',
+    wikipedia: 'Lumen_Field',
     capacity: '68,000',
     opened: '2002',
     history: 'Home of the Seattle Seahawks and Seattle Sounders FC (one of MLS\'s loudest crowds). The Seahawks held the Guinness loudest-crowd record (137.6 dB, 2013). Hosted the 2009 MLS Cup and multiple international friendlies.',
@@ -118,6 +129,7 @@ const STADIUMS = [
   {
     match: ['bmo field', 'toronto stadium'],
     name: 'BMO Field (Toronto Stadium)',
+    wikipedia: 'BMO_Field',
     capacity: '45,000 (expanded for WC)',
     opened: '2007',
     history: 'Home of Toronto FC (MLS) and the Toronto Argonauts (CFL). Hosted the 2010 & 2017 MLS Cup Finals. Originally Canada\'s first soccer-specific stadium; capacity expanded with temporary seating for the World Cup.',
@@ -128,6 +140,7 @@ const STADIUMS = [
   {
     match: ['bc place', 'vancouver stadium'],
     name: 'BC Place (Vancouver Stadium)',
+    wikipedia: 'BC_Place',
     capacity: '54,500',
     opened: '1983 (renovated 2011)',
     history: 'Home of BC Lions (CFL) and Vancouver Whitecaps (MLS). Hosted the 2010 Winter Olympics opening and closing ceremonies and the 2015 FIFA Women\'s World Cup Final. Iconic retractable cable-supported roof.',
@@ -138,6 +151,7 @@ const STADIUMS = [
   {
     match: ['azteca', 'banorte', 'mexico city stadium'],
     name: 'Estadio Azteca / Banorte (Mexico City Stadium)',
+    wikipedia: 'Estadio_Azteca',
     capacity: '87,000',
     opened: '1966',
     history: 'The only stadium to host THREE World Cup tournaments (1970, 1986, 2026) and the only one to host two World Cup Finals. Site of Maradona\'s "Hand of God" and "Goal of the Century" (1986) and Pelé\'s 1970 final win. Hosts the 2026 opening match.',
@@ -148,6 +162,7 @@ const STADIUMS = [
   {
     match: ['akron', 'guadalajara', 'zapopan'],
     name: 'Estadio Akron (Estadio Guadalajara)',
+    wikipedia: 'Estadio_Akron',
     capacity: '49,800',
     opened: '2010',
     history: 'Home of Chivas de Guadalajara, Mexico\'s most popular club. Hosted the 2011 Pan American Games opening ceremony and multiple Liga MX finals. Distinctive cloud-like exterior shell design.',
@@ -158,6 +173,7 @@ const STADIUMS = [
   {
     match: ['bbva', 'monterrey', 'guadalupe'],
     name: 'Estadio BBVA (Estadio Monterrey)',
+    wikipedia: 'Estadio_BBVA',
     capacity: '53,500',
     opened: '2015',
     history: 'Home of CF Monterrey ("Rayados"). Hosted the 2019 FIFA Club World Cup and multiple Liga MX finals. Known as "El Gigante de Acero" — the Steel Giant — for its industrial design that mirrors Monterrey\'s steel-industry heritage.',

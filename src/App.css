@@ -420,6 +420,26 @@ html, body, #root {
   font-size: 14px;
 }
 
+/* ----- Stadium photo (Wikipedia) ----- */
+.venue-photo {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-subtle);
+}
+
+/* ----- Google Maps embed iframe ----- */
+.venue-map-embed {
+  width: 100%;
+  height: 200px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  margin-top: 12px;
+  display: block;
+}
+
 /* ----- Match hero header ----- */
 .match-hero {
   background: linear-gradient(135deg, rgba(249, 115, 22, 0.18), rgba(249, 115, 22, 0.04));

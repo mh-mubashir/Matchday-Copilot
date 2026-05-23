@@ -1,4 +1,51 @@
+import { useEffect, useState } from 'react'
 import { lookupStadium } from '../stadiumInfo'
+import { getConfig, fetchWikipediaImage } from '../config'
+
+/** Lazy-loaded Wikipedia photo for a stadium. */
+function StadiumPhoto({ wikipediaTitle }) {
+  const [src, setSrc] = useState(null)
+  const [failed, setFailed] = useState(false)
+  useEffect(() => {
+    let active = true
+    setSrc(null)
+    setFailed(false)
+    if (!wikipediaTitle) return
+    fetchWikipediaImage(wikipediaTitle).then(url => {
+      if (active) setSrc(url)
+    })
+    return () => { active = false }
+  }, [wikipediaTitle])
+  if (!src || failed) return null
+  return (
+    <img
+      className="venue-photo"
+      src={src}
+      alt="Stadium"
+      onError={() => setFailed(true)}
+    />
+  )
+}
+
+/** Google Maps Embed iframe for a hotel/restaurant address. */
+function MapEmbed({ query }) {
+  const [key, setKey] = useState(null)
+  useEffect(() => {
+    getConfig().then(c => setKey(c.googleMapsKey || ''))
+  }, [])
+  if (key === null) return null
+  if (!key) return null  // backend has no key set — silently skip
+  const src = `https://www.google.com/maps/embed/v1/place?key=${key}&q=${encodeURIComponent(query)}&zoom=16`
+  return (
+    <iframe
+      className="venue-map-embed"
+      src={src}
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      title="Map preview"
+    />
+  )
+}
 
 /**
  * DetailsPanel - right column. Shows details about the point selected on the map.
@@ -24,6 +71,7 @@ function DetailsPanel({ selectedPoint, onClose }) {
         const info = lookupStadium(details.stadium)
         return (
           <>
+            {info?.wikipedia && <StadiumPhoto wikipediaTitle={info.wikipedia} />}
             <div className="match-hero">
               <div className="match-stadium-name">{info?.name || details.stadium}</div>
               <div className="match-meta-row">
@@ -134,6 +182,7 @@ function DetailsPanel({ selectedPoint, onClose }) {
             {details.signature && (
               <InfoCard icon="⭐" title="What to order">{details.signature}</InfoCard>
             )}
+            <MapEmbed query={`${title} ${details.address || ''}`.trim()} />
             <ActionLink
               href={`https://maps.google.com/?q=${encodeURIComponent(details.address || title)}`}
               label="Open in Google Maps"
@@ -195,6 +244,7 @@ function DetailsPanel({ selectedPoint, onClose }) {
             {details.description && (
               <InfoCard icon="ℹ️" title="About this hotel">{details.description}</InfoCard>
             )}
+            <MapEmbed query={`${title} ${details.address || ''}`.trim()} />
             <ActionLink
               href={details.mapsUrl || `https://maps.google.com/?q=${encodeURIComponent(details.address || title)}`}
               label="Open in Google Maps"

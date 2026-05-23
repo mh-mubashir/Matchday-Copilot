@@ -188,6 +188,14 @@ async def chat(body: ChatIn) -> dict[str, Any]:
     return {"message": raw or "(empty response)", "map": None}
 
 
+@app.get("/api/config")
+async def config() -> dict[str, Any]:
+    """Public client-side config (no secrets). The Google Maps Embed key is
+    intentionally exposed — Google expects it in the iframe URL, with origin
+    restrictions configured in Google Cloud Console."""
+    return {"googleMapsKey": os.getenv("GOOGLE_MAPS_KEY", "")}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("api:app", host="127.0.0.1", port=8000, reload=False)
