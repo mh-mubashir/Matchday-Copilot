@@ -1,0 +1,197 @@
+{
+  "project_id": "f55a63b9-7355-40d0-b3fa-f61fdc589c82",
+  "components": [
+    {
+      "id": "webhook_1",
+      "provider": "webhook",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "parameters": {},
+        "type": "webhook"
+      },
+      "ui": {
+        "position": {
+          "x": -20,
+          "y": -280
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "parse_1",
+      "provider": "parse",
+      "config": {},
+      "ui": {
+        "position": {
+          "x": 252,
+          "y": -252
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "tags",
+          "from": "webhook_1"
+        }
+      ]
+    },
+    {
+      "id": "preprocessor_langchain_1",
+      "provider": "preprocessor_langchain",
+      "config": {
+        "profile": "default",
+        "default": {
+          "mode": "strlen",
+          "splitter": "RecursiveCharacterTextSplitter"
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 492,
+          "y": -170
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "text",
+          "from": "parse_1"
+        },
+        {
+          "lane": "text",
+          "from": "webhook_1"
+        }
+      ]
+    },
+    {
+      "id": "embedding_transformer_1",
+      "provider": "embedding_transformer",
+      "config": {
+        "profile": "miniLM"
+      },
+      "ui": {
+        "position": {
+          "x": 721,
+          "y": -163
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "documents",
+          "from": "preprocessor_langchain_1"
+        },
+        {
+          "lane": "questions",
+          "from": "chat_1"
+        }
+      ]
+    },
+    {
+      "id": "pinecone_1",
+      "provider": "pinecone",
+      "config": {
+        "profile": "pod-based",
+        "pod-based": {
+          "apikey": "${ROCKETRIDE_PINECONE_KEY}",
+          "collection": "rocketride",
+          "score": 0.7
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 948,
+          "y": -79
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "documents",
+          "from": "embedding_transformer_1"
+        },
+        {
+          "lane": "questions",
+          "from": "embedding_transformer_1"
+        }
+      ]
+    },
+    {
+      "id": "chat_1",
+      "provider": "chat",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "parameters": {},
+        "type": "chat"
+      },
+      "ui": {
+        "position": {
+          "x": -20,
+          "y": 0
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "llm_gemini_1",
+      "provider": "llm_gemini",
+      "config": {
+        "profile": "gemini-2_5-flash",
+        "5-flash": {
+          "apikey": "${ROCKETRIDE_GEMINI_KEY}"
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 1161,
+          "y": -44
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "questions",
+          "from": "pinecone_1"
+        }
+      ]
+    },
+    {
+      "id": "response_answers_1",
+      "provider": "response_answers",
+      "config": {
+        "laneName": "answers"
+      },
+      "ui": {
+        "position": {
+          "x": 1362,
+          "y": -42
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "answers",
+          "from": "llm_gemini_1"
+        }
+      ]
+    }
+  ],
+  "isLocked": false,
+  "snapToGrid": true,
+  "snapGridSize": [
+    10,
+    10
+  ],
+  "version": 1,
+  "docRevision": 4
+}
