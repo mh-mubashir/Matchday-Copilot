@@ -1,0 +1,177 @@
+{
+  "components": [
+    {
+      "id": "chat_1",
+      "provider": "chat",
+      "name": "Chat",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "parameters": {},
+        "type": "chat"
+      },
+      "ui": {
+        "position": {
+          "x": 20,
+          "y": 200
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "agent_rocketride_1",
+      "provider": "agent_rocketride",
+      "name": "RocketRide Wave",
+      "config": {
+        "agent_description": "An itinerary planner agent that helps users plan multi-city trips with points of interest, routes, and scheduling.",
+        "instructions": [
+          "You are a friendly travel itinerary planner assistant. Your job is to help users plan trips by gathering information step by step.",
+          "Follow this conversational flow strictly:",
+          "1. Ask: 'Welcome! Where do you want to go?'",
+          "2. After they name a city, ask: 'How long will you stay in [city]?'",
+          "3. Ask: 'When do you want to start your visit in [city]?'",
+          "4. Ask: 'Is the date flexible?'",
+          "5. Ask: 'Would you like to visit some Points of Interest in [city]?'",
+          "6. If yes, use the Google Maps MCP tools to search for popular tourist attractions, restaurants, and landmarks near the city. Present a numbered list of POIs with brief descriptions for the user to select from.",
+          "7. After they select POIs, ask: 'Would you like to add another city to your trip?'",
+          "8. If yes, ask for the city name and repeat from step 2.",
+          "9. Once all cities are collected, use Google Maps tools to plan optimal routes between cities and between POIs within each city.",
+          "10. Present the final itinerary with: cities, dates, POIs per city, travel routes and estimated times between locations.",
+          "Use the Google Maps MCP tools (mcp.maps_search_places, mcp.maps_get_directions, mcp.maps_get_place_details) to find real POIs and calculate actual routes.",
+          "Store collected trip data in memory as you go so you don't lose context between messages.",
+          "Always be conversational and helpful. If the user gives incomplete info, ask clarifying questions."
+        ],
+        "max_waves": 15,
+        "parameters": {}
+      },
+      "ui": {
+        "position": {
+          "x": 240,
+          "y": 200
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "questions",
+          "from": "chat_1"
+        }
+      ]
+    },
+    {
+      "id": "response_answers_1",
+      "provider": "response_answers",
+      "name": "Return Answers",
+      "config": {
+        "laneName": "answers"
+      },
+      "ui": {
+        "position": {
+          "x": 460,
+          "y": 200
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "answers",
+          "from": "agent_rocketride_1"
+        }
+      ]
+    },
+    {
+      "id": "llm_gmi_cloud_1",
+      "provider": "llm_gmi_cloud",
+      "name": "GMI Cloud",
+      "config": {
+        "profile": "deepseek-v3",
+        "deepseek-v3": {
+          "apikey": "${ROCKETRIDE_GMI_APIKEY}"
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 130,
+          "y": 380
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "control": [
+        {
+          "classType": "llm",
+          "from": "agent_rocketride_1"
+        }
+      ]
+    },
+    {
+      "id": "memory_internal_1",
+      "provider": "memory_internal",
+      "name": "Memory (Internal)",
+      "config": {
+        "type": "memory_internal"
+      },
+      "ui": {
+        "position": {
+          "x": 350,
+          "y": 380
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "control": [
+        {
+          "classType": "memory",
+          "from": "agent_rocketride_1"
+        }
+      ]
+    },
+    {
+      "id": "mcp_client_1",
+      "provider": "mcp_client",
+      "name": "MCP Client",
+      "config": {
+        "serverName": "mcp",
+        "transport": "stdio",
+        "type": "mcp_client",
+        "stdio": {
+          "commandLine": "python -m events_mcp.mcp_server"
+        },
+        "http": {
+          "bearer": "",
+          "endpoint": "https://mcp.open-mcp.org/api/server/google-maps@latest/mcp",
+          "headers": {}
+        },
+        "parameters": {
+          "google": {}
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 240,
+          "y": 500
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "control": [
+        {
+          "classType": "tool",
+          "from": "agent_rocketride_1"
+        }
+      ]
+    }
+  ],
+  "project_id": "6989924f-c59e-4b1f-a198-39d4a10dcb45",
+  "version": 1,
+  "isLocked": false,
+  "snapToGrid": true,
+  "snapGridSize": [
+    10,
+    10
+  ],
+  "docRevision": 2
+}

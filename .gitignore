@@ -1,0 +1,8 @@
+.rocketride/
+__pycache__/
+*.pyc
+.claude/
+.env
+.env.example
+*.MD
+*.md
