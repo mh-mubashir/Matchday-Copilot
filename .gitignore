@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.rocketride/
+.env
+__pycache__/
+.venv/
+
