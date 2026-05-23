@@ -128,28 +128,15 @@ const SAMPLE_MAP_DATA = {
   ]
 }
 
-export const mockSendMessage = ({ messages, message }) => {
-  // Returns a Promise that resolves after 800ms to mimic real network latency.
-  // This lets us test the loading state properly during development.
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const userMessageCount = countUserMessages(messages)
-
-      // Scripted conversation flow - one question per user message.
-      if (userMessageCount === 1) {
-        resolve({ type: 'message', content: 'Great! Which team are you here to cheer on?' })
-      } else if (userMessageCount === 2) {
-        resolve({ type: 'message', content: 'Great choice! How many days are you staying there?' })
-      } else if (userMessageCount === 3) {
-        resolve({ type: 'message', content: 'Perfect. And what’s your total budget for the trip (in USD)?' })
-      } else {
-        // All 4 criteria collected - return the map payload.
-        resolve({
-          type: 'map_ready',
-          content: `Here's your map for ${SAMPLE_MAP_DATA.city}! Click on the markers to explore each stop.`,
-          ...SAMPLE_MAP_DATA
-        })
-      }
-    }, 800)
+export const mockSendMessage = async ({ messages, message, mapContext }) => {
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, message, mapContext }),
   })
+  if (!res.ok) {
+    const detail = await res.text().catch(() => res.statusText)
+    throw new Error(`API ${res.status}: ${detail}`)
+  }
+  return res.json()
 }

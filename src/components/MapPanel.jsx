@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip } from 'react-leaflet'
 
 /**
  * MapPanel - center column. Shows either an empty state or the interactive map.
@@ -48,18 +48,36 @@ function MapPanel({ mapData, currentDay, onPointClick, onDayChange }) {
   const currentDayData = mapData.days.find(d => d.day === currentDay)
   const points = currentDayData?.points || []
 
+  // Center on the day's match (preferred) so the stadium sits in the middle
+  // of the map while hotels/restaurants spread around it.
+  const matchPoint = points.find(p => p.type === 'match')
+  const dayCenter = matchPoint
+    ? [matchPoint.lat, matchPoint.lng]
+    : points.length > 0
+      ? [points[0].lat, points[0].lng]
+      : [mapData.coordinates.lat, mapData.coordinates.lng]
+
   return (
     <section className="map-panel">
       <div className="map-header">
-        <h2>{mapData.city} <span className="day-label">— Day {currentDay}</span></h2>
+        <h2>
+          {points.find(p => p.type === 'match')?.details?.stadium || mapData.city}
+          <span className="day-label"> — Day {currentDay}</span>
+        </h2>
+        <div className="map-legend">
+          <span className="legend-item"><span className="legend-dot" style={{ background: TYPE_COLORS.match }}></span>Stadium</span>
+          <span className="legend-item"><span className="legend-dot" style={{ background: TYPE_COLORS.hotel }}></span>Hotel</span>
+          <span className="legend-item"><span className="legend-dot" style={{ background: TYPE_COLORS.restaurant }}></span>Restaurant</span>
+        </div>
       </div>
 
       {/* Wrapper exists so we can give the map an explicit flex height in CSS */}
       <div className="map-container-wrapper">
         <MapContainer
-          // `key` forces a re-mount if the city ever changes - cleaner than recentering.
-          key={mapData.city}
-          center={[mapData.coordinates.lat, mapData.coordinates.lng]}
+          // Re-mount whenever the active day changes so the map recenters
+          // to that day's stadium instead of staying on Day 1's city.
+          key={`${mapData.city}-${currentDay}`}
+          center={dayCenter}
           zoom={12}
           style={{ height: '100%', width: '100%' }}
         >
@@ -73,17 +91,19 @@ function MapPanel({ mapData, currentDay, onPointClick, onDayChange }) {
             <CircleMarker
               key={point.id}
               center={[point.lat, point.lng]}
-              radius={12}
+              radius={point.type === 'match' ? 14 : 9}
               pathOptions={{
                 fillColor: TYPE_COLORS[point.type] || '#94a3b8',
                 fillOpacity: 0.9,
                 color: '#ffffff',
                 weight: 2
               }}
-              // The click handler bubbles up to App via onPointClick.
               eventHandlers={{ click: () => onPointClick(point) }}
             >
-              {/* Popup is a nice-to-have - lightweight info on hover/click before opening details */}
+              {/* Hover tooltip — shows what the marker is at a glance */}
+              <Tooltip direction="top" offset={[0, -8]} opacity={1}>
+                <strong>{TYPE_LABELS[point.type]}</strong>: {point.title}
+              </Tooltip>
               <Popup>
                 <strong>{point.title}</strong><br />
                 <small>{TYPE_LABELS[point.type]}</small>

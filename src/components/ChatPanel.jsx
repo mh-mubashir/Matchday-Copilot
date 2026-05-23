@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 /**
  * ChatPanel - left column. Renders the conversation and the input form.
@@ -37,7 +39,11 @@ function ChatPanel({ messages, isLoading, onSendMessage }) {
       <div className="messages-area">
         {messages.map((msg, i) => (
           <div key={i} className={`message message-${msg.role}`}>
-            {msg.content}
+            {msg.role === 'ai' ? (
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+            ) : (
+              msg.content
+            )}
           </div>
         ))}
 

@@ -1,0 +1,155 @@
+================================================================================
+MATCHDAY COPILOT — DEMO PROMPT SEQUENCES
+================================================================================
+
+How to use this file:
+- Each block is a sequence to run in the chat panel from a fresh page reload.
+- Refresh the browser between sequences so the chat history starts empty.
+- Each "→ user types" line is a single message. Wait for the AI reply before
+  sending the next one.
+- Lines starting with "expect:" describe what should happen on screen, not
+  what to type.
+
+================================================================================
+SEQUENCE 1 — THE HAPPY PATH (Germany fan, ~60 sec)
+================================================================================
+Best opener. Crosses USA -> Canada -> USA in three cities. Shows everything
+working in one shot.
+
+→ user types:
+I'm a Germany fan landing on June 12 and leaving June 27. I want to follow
+every Germany match.
+
+expect:
+- Chat lists 3 matches:
+    June 14  Germany vs Curaçao         Houston Stadium (NRG)
+    June 20  Germany vs Côte d'Ivoire   Toronto Stadium (BMO Field)
+    June 25  Ecuador vs Germany         New York New Jersey Stadium (MetLife)
+- Map shows 3 day tabs.
+- Day 1 centered on Houston, with 1 stadium + 3 hotels + 3 restaurants.
+
+actions to perform live:
+- Click Day 2 -> map flies to Toronto.
+- Hover the orange dot -> tooltip "Stadium: ..."
+- Hover a blue dot -> tooltip "Hotel: ..."
+- Hover a yellow dot -> tooltip "Restaurant: ..."
+- Click a hotel dot -> right panel slides in with hotel details.
+
+================================================================================
+SEQUENCE 2 — THE UNDECIDED TRAVELER (~90 sec)
+================================================================================
+Demonstrates that the assistant asks for missing info instead of guessing.
+
+→ user types:
+I want to go to the World Cup.
+
+expect:
+- AI asks which team and what dates (does NOT pick for you).
+- No map renders yet.
+
+→ user types:
+France. I can fly in any time between June 14 and June 28.
+
+expect:
+- Chat lists 3 matches:
+    June 16  France vs Senegal       MetLife (East Rutherford)
+    June 22  France vs Iraq          Lincoln Financial (Philadelphia)
+    June 26  Norway vs France        Gillette (Foxborough)
+- Map shows 3 day tabs across 3 different US cities.
+
+actions to perform live:
+- Click each day tab and let the audience see the map re-center.
+
+================================================================================
+SEQUENCE 3 — POWER USER FOLLOW-UPS (~90 sec)
+================================================================================
+After Sequence 2 (France plan is on screen), keep typing without refreshing.
+This demonstrates the on-screen context being fed back into the chat.
+
+→ user types:
+Which hotel on Day 1 is closest to the stadium?
+
+expect:
+- AI compares the 3 hotels shown on Day 1 (MetLife area) using the
+  walkDistance field from the on-screen context.
+- Map does NOT re-render (map stays on whatever day was selected).
+
+→ user types:
+Tell me more about Pat's King of Steaks.
+
+expect:
+- AI gives details about the cheesesteak spot near Lincoln Financial,
+  pulled from the on-screen context (cuisine, hours, signature dish).
+
+→ user types:
+Which of the three stadiums is most historic?
+
+expect:
+- AI compares: MetLife hosting the Final, Gillette's Patriots dynasty,
+  Lincoln Financial's Eagles history.
+
+================================================================================
+SEQUENCE 4 — GRACEFUL FAILURE (~30 sec)
+================================================================================
+Demonstrates the model won't hallucinate matches that don't exist.
+
+→ user types:
+I'm a North Korea fan, June 14 to June 20.
+
+expect:
+- AI says it didn't find any North Korea matches in the schedule.
+- No map renders.
+- Maybe lists the closest dates or suggests broader criteria.
+
+================================================================================
+SEQUENCE 5 — MULTI-CITY EUROPE FAN (alternate happy path)
+================================================================================
+Use if you want a backup to Sequence 1.
+
+→ user types:
+I'm following Brazil. I'll be in the US from June 12 to June 26.
+
+expect:
+- Chat lists 3 matches:
+    June 13  Brazil vs Morocco     MetLife (East Rutherford)
+    June 19  Brazil vs Haiti       Lincoln Financial (Philadelphia)
+    June 24  Scotland vs Brazil    Hard Rock (Miami Gardens)
+- Three cities up the East Coast: NJ -> Philly -> Miami.
+
+================================================================================
+SEQUENCE 6 — ENGLAND FAN (alternate)
+================================================================================
+
+→ user types:
+England supporter, June 16 to June 28.
+
+expect:
+- Chat lists 3 matches:
+    June 17  England vs Croatia     Dallas Stadium (AT&T)
+    June 23  England vs Ghana       Boston Stadium (Gillette)
+    June 27  Panama vs England      MetLife (East Rutherford)
+- Crosses 3 distinct US regions: Texas, Massachusetts, NJ.
+
+================================================================================
+SEQUENCE 7 — CROSS-BORDER ARGENTINA FAN (alternate)
+================================================================================
+
+→ user types:
+Argentina fan, traveling June 15 to June 28.
+
+expect:
+- Chat lists 3 matches:
+    June 16  Argentina vs Algeria    Kansas City Stadium (Arrowhead)
+    June 22  Argentina vs Austria    Dallas Stadium (AT&T)
+    June 27  Jordan vs Argentina     Dallas Stadium (AT&T)
+- Two cities, KC and Dallas (good for showing "same stadium twice" case).
+
+================================================================================
+DEMO TIPS
+================================================================================
+- Pre-load Sequence 1's prompt in your clipboard before opening the demo.
+- Resize the window so all 3 columns are visible without horizontal scrolling.
+- The Bricolage Grotesque font and orange accent look best on a dark wall.
+- If a sequence misbehaves (model returns wrong matches), refresh the page
+  and ask the model directly in chat: "Check match #29 in the schedule" --
+  it will usually correct itself.

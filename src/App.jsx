@@ -3,6 +3,34 @@ import ChatPanel from './components/ChatPanel'
 import MapPanel from './components/MapPanel'
 import DetailsPanel from './components/DetailsPanel'
 import { mockSendMessage } from './mockApi'
+import { lookupNearby } from './stadiumInfo'
+
+/**
+ * After the AI returns a map_ready plan, append 3 hotels + 3 restaurants
+ * (from our static lookup) to each day's points so the map renders a richer
+ * itinerary than just the stadium pin.
+ */
+function augmentWithNearby(map) {
+  if (!map?.days) return map
+  return {
+    ...map,
+    days: map.days.map(day => {
+      const matchPoint = day.points?.find(p => p.type === 'match')
+      if (!matchPoint) return day
+      const nearby = lookupNearby(matchPoint.details?.stadium)
+      if (!nearby) return day
+      const dayPrefix = `d${day.day}-`
+      return {
+        ...day,
+        points: [
+          ...day.points,
+          ...nearby.hotels.map(h => ({ ...h, id: dayPrefix + h.id })),
+          ...nearby.restaurants.map(r => ({ ...r, id: dayPrefix + r.id })),
+        ],
+      }
+    }),
+  }
+}
 
 /**
  * App is the single source of truth for application state.
@@ -43,22 +71,25 @@ function App() {
     setIsLoading(true)
 
     try {
-      // mockSendMessage will be swapped for a real fetch() once backend URL is known.
-      const response = await mockSendMessage({ messages: newMessages, message: text })
+      // Send current map context so GMI can answer questions about what's on screen.
+      const response = await mockSendMessage({
+        messages: newMessages,
+        message: text,
+        mapContext: mapData,
+      })
 
-      // The backend returns one of two response shapes - we handle both.
-      if (response.type === 'message') {
-        // Standard conversational reply - just append to messages.
-        setMessages([...newMessages, { role: 'ai', content: response.content }])
-      } else if (response.type === 'map_ready') {
-        // Special reply: the AI has gathered all criteria and produced a plan.
-        setMessages([...newMessages, { role: 'ai', content: response.content }])
+      // Backend always returns { message, map }. `message` updates the chat;
+      // `map` (when non-null) updates the right-hand map panel.
+      if (response.message) {
+        setMessages([...newMessages, { role: 'ai', content: response.message }])
+      }
+      if (response.map) {
+        const enriched = augmentWithNearby(response.map)
         setMapData({
-          city: response.city,
-          coordinates: response.coordinates,
-          days: response.days
+          city: enriched.city,
+          coordinates: enriched.coordinates,
+          days: enriched.days,
         })
-        // Always reset to day 1 when a fresh plan arrives.
         setCurrentDay(1)
       }
     } catch (error) {
