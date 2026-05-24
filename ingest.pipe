@@ -1,0 +1,154 @@
+{
+  "components": [
+    {
+      "id": "webhook_1",
+      "provider": "webhook",
+      "name": "Document Upload",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "parameters": {},
+        "type": "webhook"
+      },
+      "ui": {
+        "position": {
+          "x": 20,
+          "y": 200
+        },
+        "measured": {
+          "width": 150,
+          "height": 117
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "parse_1",
+      "provider": "parse",
+      "name": "Parse",
+      "config": {
+        "parameters": {}
+      },
+      "ui": {
+        "position": {
+          "x": 240,
+          "y": 200
+        },
+        "measured": {
+          "width": 150,
+          "height": 66
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "tags",
+          "from": "webhook_1"
+        }
+      ]
+    },
+    {
+      "id": "preprocessor_langchain_1",
+      "provider": "preprocessor_langchain",
+      "name": "Chunker",
+      "config": {
+        "profile": "default",
+        "default": {
+          "mode": "strlen",
+          "splitter": "RecursiveCharacterTextSplitter",
+          "strlen": 512
+        },
+        "parameters": {}
+      },
+      "ui": {
+        "position": {
+          "x": 460,
+          "y": 200
+        },
+        "measured": {
+          "width": 150,
+          "height": 66
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "text",
+          "from": "parse_1"
+        }
+      ]
+    },
+    {
+      "id": "embedding_openai_1",
+      "provider": "embedding_openai",
+      "name": "OpenAI Embedding",
+      "config": {
+        "profile": "text-embedding-3-small",
+        "text-embedding-3-small": {
+          "apikey": "${ROCKETRIDE_OPENAI_KEY}"
+        },
+        "parameters": {}
+      },
+      "ui": {
+        "position": {
+          "x": 680,
+          "y": 200
+        },
+        "measured": {
+          "width": 150,
+          "height": 66
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "documents",
+          "from": "preprocessor_langchain_1"
+        }
+      ]
+    },
+    {
+      "id": "pinecone_1",
+      "provider": "pinecone",
+      "name": "Pinecone (Docs)",
+      "config": {
+        "profile": "serverless-dense",
+        "serverless-dense": {
+          "apikey": "${ROCKETRIDE_PINECONE_APIKEY}",
+          "collection": "rocketride-docs",
+          "score": 0.7
+        },
+        "parameters": {}
+      },
+      "ui": {
+        "position": {
+          "x": 900,
+          "y": 200
+        },
+        "measured": {
+          "width": 150,
+          "height": 135
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "documents",
+          "from": "embedding_openai_1"
+        }
+      ]
+    }
+  ],
+  "project_id": "c3081bcd-973f-4f33-ae05-7951f467dbfd",
+  "version": 1,
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}
