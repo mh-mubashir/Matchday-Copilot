@@ -144,9 +144,17 @@ def summarize_map_context(ctx: dict[str, Any] | None) -> str:
             if p.get("type") == "match":
                 lines.append(f"    - MATCH: {p['title']} at {d.get('stadium','')} on {d.get('date','')} {d.get('time','')}")
             elif p.get("type") == "hotel":
-                lines.append(f"    - HOTEL: {p['title']} ({d.get('pricePerNight','')}, {d.get('walkDistance','')})")
+                lines.append(
+                    f"    - HOTEL: {p['title']} | {d.get('pricePerNight','')} | "
+                    f"{d.get('walkDistance','')} | {d.get('address','')} | "
+                    f"amenities: {d.get('amenities','')} | {d.get('description','')}"
+                )
             elif p.get("type") == "restaurant":
-                lines.append(f"    - RESTAURANT: {p['title']} ({d.get('cuisine','')}, hours {d.get('hours','')}, signature: {d.get('signature','')})")
+                lines.append(
+                    f"    - RESTAURANT: {p['title']} | {d.get('cuisine','')} | "
+                    f"{d.get('priceRange','')} | hours: {d.get('hours','')} | "
+                    f"{d.get('address','')} | signature: {d.get('signature','')}"
+                )
     return "\n".join(lines)
 
 

@@ -161,27 +161,19 @@ function DetailsPanel({ selectedPoint, onClose }) {
                   <span className="match-meta-label">Price</span>
                   <span className="match-meta-value">{details.priceRange || details.budget || '—'}</span>
                 </div>
-              </div>
-            </div>
-            <div className="stat-grid">
-              <div className="stat-tile">
-                <div className="stat-tile-icon">⏰</div>
-                <div>
-                  <div className="stat-tile-value" style={{ fontSize: 13 }}>{details.hours || details.schedule || '—'}</div>
-                  <div className="stat-tile-label">Hours</div>
-                </div>
-              </div>
-              <div className="stat-tile">
-                <div className="stat-tile-icon">📍</div>
-                <div>
-                  <div className="stat-tile-value" style={{ fontSize: 13 }}>{details.address || '—'}</div>
-                  <div className="stat-tile-label">Address</div>
+                <div className="match-meta">
+                  <span className="match-meta-label">Hours</span>
+                  <span className="match-meta-value">{details.hours || details.schedule || '—'}</span>
                 </div>
               </div>
             </div>
             {details.signature && (
-              <InfoCard icon="⭐" title="What to order">{details.signature}</InfoCard>
+              <InfoCard icon="⭐" title="Don't miss">{details.signature}</InfoCard>
             )}
+            <InfoCard icon="📍" title="Address">{details.address || '—'}</InfoCard>
+            <InfoCard icon="💡" title="Pro tip">
+              {`Ask the chat: "Tell me more about ${title}" — it has the full picture from your itinerary context.`}
+            </InfoCard>
             <MapEmbed query={`${title} ${details.address || ''}`.trim()} />
             <ActionLink
               href={`https://maps.google.com/?q=${encodeURIComponent(details.address || title)}`}
@@ -225,25 +217,14 @@ function DetailsPanel({ selectedPoint, onClose }) {
                 </div>
               </div>
             </div>
-            <div className="stat-grid">
-              <div className="stat-tile">
-                <div className="stat-tile-icon">📍</div>
-                <div>
-                  <div className="stat-tile-value" style={{ fontSize: 13 }}>{details.address || '—'}</div>
-                  <div className="stat-tile-label">Address</div>
-                </div>
-              </div>
-              <div className="stat-tile">
-                <div className="stat-tile-icon">🛎️</div>
-                <div>
-                  <div className="stat-tile-value" style={{ fontSize: 13 }}>{details.amenities || '—'}</div>
-                  <div className="stat-tile-label">Amenities</div>
-                </div>
-              </div>
-            </div>
             {details.description && (
               <InfoCard icon="ℹ️" title="About this hotel">{details.description}</InfoCard>
             )}
+            <InfoCard icon="🛎️" title="Amenities">{details.amenities || '—'}</InfoCard>
+            <InfoCard icon="📍" title="Address">{details.address || '—'}</InfoCard>
+            <InfoCard icon="💡" title="Pro tip">
+              {`Ask the chat anything about ${title} — booking advice, nearby food, transit options to the stadium.`}
+            </InfoCard>
             <MapEmbed query={`${title} ${details.address || ''}`.trim()} />
             <ActionLink
               href={details.mapsUrl || `https://maps.google.com/?q=${encodeURIComponent(details.address || title)}`}
